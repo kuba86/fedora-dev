@@ -7,9 +7,9 @@ on:
     branches: [ "main" ]
 
 env:
-  REGISTRY_USER: quayuser
-  IMAGE_REGISTRY: quay.io
-  REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+  DOCKER_USER: kuba86
+  DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+  IMAGE_REGISTRY: docker.io
 
 jobs:
   container:
@@ -19,31 +19,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         
-      - name: Login
+      - name: Login to registry
         uses: redhat-actions/podman-login@v1
         with:
-          username: ${{ env.REGISTRY_USER }}
-          password: ${{ env.REGISTRY_PASSWORD }}
+          username: ${{ env.DOCKER_USER }}
+          password: ${{ env.DOCKER_TOKEN }}
           registry: ${{ env.IMAGE_REGISTRY }}
           
       - name: Build image
+        id: build-image
         uses: redhat-actions/buildah-build@v2
         with:
           image: fedora-dev
-          tags: v1 ${{ github.sha }}
+          tags: latest ${{ github.sha }}
           containerfiles: |
             ./Containerfile
-          build-args: |
-            some_arg=some_value
             
-      - name: Push To quay.io
-        id: push-to-quay
+      - name: Push to registry
+        id: push-to-registry
         uses: redhat-actions/push-to-registry@v2
         with:
           image: ${{ steps.build-image.outputs.image }}
           tags: ${{ steps.build-image.outputs.tags }}
-          registry: quay.io/quay-user
+          registry: ${{ env.IMAGE_REGISTRY }}
 
       - name: Print image url
-        run: echo "Image pushed to ${{ steps.push-to-quay.outputs.registry-paths }}"
-      
+        run: echo "Image pushed to ${{ steps.push-to-registry.outputs.registry-paths }}"
