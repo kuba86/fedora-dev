@@ -28,6 +28,7 @@ jobs:
           $GITHUB_WORKSPACE
       - name: Login to ghcr.io
         run: |
+          podman logout --all
           podman login --username $GITHUB_ACTOR --password ${{secrets.GITHUB_TOKEN}} ghcr.io
       - name: Push container
         run: |
