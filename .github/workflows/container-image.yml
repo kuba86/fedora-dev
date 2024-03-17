@@ -18,21 +18,21 @@ jobs:
 #          sudo apt-get -y install fish
       - name: Build container
         run: |
-          echo build \
-          --format oci \
-          --tls-verify true \
+          podman build \
+          --format=oci \
+          --tls-verify=true \
           --squash \
-          --file Containerfile \
-          --tag $GITHUB_REPOSITORY:latest \
-          --tag $GITHUB_REPOSITORY:$GITHUB_SHA \
+          --file=Containerfile \
+          --tag=$GITHUB_REPOSITORY:latest \
+          --tag=$GITHUB_REPOSITORY:$GITHUB_SHA \
           $GITHUB_WORKSPACE
       - name: Login to ghcr.io
         run: |
-          /usr/bin/podman login --username $GITHUB_ACTOR --password ${{secrets.GITHUB_TOKEN}} ghcr.io
+          podman login --username $GITHUB_ACTOR --password ${{secrets.GITHUB_TOKEN}} ghcr.io
       - name: Push container
         run: |
-          /usr/bin/podman push localhost/$GITHUB_REPOSITORY:$GITHUB_SHA ghcr.io/$GITHUB_REPOSITORY:latest
-          /usr/bin/podman push localhost/$GITHUB_REPOSITORY:$GITHUB_SHA ghcr.io/$GITHUB_REPOSITORY:$GITHUB_SHA
+          podman push localhost/$GITHUB_REPOSITORY:$GITHUB_SHA ghcr.io/$GITHUB_REPOSITORY:latest
+          podman push localhost/$GITHUB_REPOSITORY:$GITHUB_SHA ghcr.io/$GITHUB_REPOSITORY:$GITHUB_SHA
 
 #      - name: show env
 #        run: printenv
