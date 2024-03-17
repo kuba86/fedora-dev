@@ -19,26 +19,28 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
-      - name: Login to registry
-        uses: redhat-actions/podman-login@v1
-        with:
-          username: ${{ env.DOCKER_USER }}
-          password: ${{ env.DOCKER_TOKEN }}
-          registry: ${{ env.IMAGE_REGISTRY }}
-          
-      - name: Build image
-        id: build-image
-        uses: redhat-actions/buildah-build@v2
-        with:
-          image: ${{ env.DOCKER_USER }}/fedora-dev
-          tags: latest ${{ github.sha }}
-          containerfiles: |
-            ./Containerfile
-          extra-args: |
-            --format=oci
-            --squash
-            
+        run: printenv
+      - name: show env
+        run: printenv
+#      - name: Login to registry
+#        uses: redhat-actions/podman-login@v1
+#        with:
+#          username: ${{ env.DOCKER_USER }}
+#          password: ${{ env.DOCKER_TOKEN }}
+#          registry: ${{ env.IMAGE_REGISTRY }}
+
+#      - name: Build image
+#        id: build-image
+#        uses: redhat-actions/buildah-build@v2
+#        with:
+#          image: ${{ env.DOCKER_USER }}/fedora-dev
+#          tags: latest ${{ github.sha }}
+#          oci: 'true'
+#          containerfiles: |
+#            ./Containerfile
+#          extra-args: |
+#            --squash
+
 #      - name: Push to registry
 #        id: push-to-registry
 #        uses: redhat-actions/push-to-registry@v2
