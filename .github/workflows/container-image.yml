@@ -6,30 +6,42 @@ on:
   pull_request:
     branches: [ "main" ]
 
-env:
-  DOCKER_USER: kuba86
-  DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
-  IMAGE_REGISTRY: docker.io
-
 jobs:
-
   container:
-    name: build fedora-dev
-    runs-on: ubuntu-latest
+    name: build fedora-dev container
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Install package
+        run: |
+          sudo apt-get -y install fish
+      - name: Build container
+        run: |
+          podman build \
+          --format oci \
+          --tls-verify true \
+          --squash \
+          --file Containerfile \
+          --tag ${{env.GITHUB_REPOSITORY}}:latest \
+          --tag ${{env.GITHUB_REPOSITORY}}:${{github.sha}} \
+          ${{env.GITHUB_WORKSPACE}}
+      - name: Login to ghcr.io
+        run: |
+          podman login --username ${{env.GITHUB_ACTOR}} --password ${{secrets.GITHUB_TOKEN}} ghcr.io
+      - name: Push container
+        run: |
+          podman push localhost/${{env.GITHUB_REPOSITORY}}:latest ghcr.io/${{env.GITHUB_REPOSITORY}}:latest
+          podman push localhost/${{env.GITHUB_REPOSITORY}}:latest ghcr.io/${{env.GITHUB_REPOSITORY}}:${{github.sha}}
 
-      - name: show env
-        run: printenv
-
+#      - name: show env
+#        run: printenv
 #      - name: Login to registry
 #        uses: redhat-actions/podman-login@v1
 #        with:
 #          username: ${{ env.DOCKER_USER }}
 #          password: ${{ env.DOCKER_TOKEN }}
 #          registry: ${{ env.IMAGE_REGISTRY }}
-
 #      - name: Build image
 #        id: build-image
 #        uses: redhat-actions/buildah-build@v2
@@ -41,7 +53,6 @@ jobs:
 #            ./Containerfile
 #          extra-args: |
 #            --squash
-
 #      - name: Push to registry
 #        id: push-to-registry
 #        uses: redhat-actions/push-to-registry@v2
