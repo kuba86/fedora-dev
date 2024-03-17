@@ -34,6 +34,9 @@ jobs:
           tags: latest ${{ github.sha }}
           containerfiles: |
             ./Containerfile
+          build-args: |
+            --format=oci
+            --squash
             
       - name: Push to registry
         id: push-to-registry
