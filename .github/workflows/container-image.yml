@@ -12,6 +12,7 @@ env:
   IMAGE_REGISTRY: docker.io
 
 jobs:
+
   container:
     name: build fedora-dev
     runs-on: ubuntu-latest
@@ -34,17 +35,17 @@ jobs:
           tags: latest ${{ github.sha }}
           containerfiles: |
             ./Containerfile
-          build-args: |
+          extra-args: |
             --format=oci
             --squash
             
-      - name: Push to registry
-        id: push-to-registry
-        uses: redhat-actions/push-to-registry@v2
-        with:
-          image: ${{ steps.build-image.outputs.image }}
-          tags: ${{ steps.build-image.outputs.tags }}
-          registry: ${{ env.IMAGE_REGISTRY }}
-
-      - name: Print image url
-        run: echo "Image pushed to ${{ steps.push-to-registry.outputs.registry-paths }}"
+#      - name: Push to registry
+#        id: push-to-registry
+#        uses: redhat-actions/push-to-registry@v2
+#        with:
+#          image: ${{ steps.build-image.outputs.image }}
+#          tags: ${{ steps.build-image.outputs.tags }}
+#          registry: ${{ env.IMAGE_REGISTRY }}
+#
+#      - name: Print image url
+#        run: echo "Image pushed to ${{ steps.push-to-registry.outputs.registry-paths }}"
