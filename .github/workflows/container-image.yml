@@ -18,15 +18,14 @@ jobs:
           podman build \
           --squash \
           --file=Containerfile \
-          --tag=${{ github.repository }}:latest \
+          --tag=${{ github.repository }}:$GITHUB_SHA \
           $GITHUB_WORKSPACE
       - name: Login to ghcr.io
         run: |
-          podman logout --all
           podman login --username $GITHUB_ACTOR --password ${{secrets.GITHUB_TOKEN}} ghcr.io
       - name: Push container
         run: |
-          local_image_id=${{ github.repository }}:latest
+          local_image_id=${{ github.repository }}:$GITHUB_SHA
           remote_image_id=ghcr.io/${{ github.repository }}:latest
           echo podman push --format oci $local_image_id $remote_image_id
           podman push --format oci $local_image_id $remote_image_id
