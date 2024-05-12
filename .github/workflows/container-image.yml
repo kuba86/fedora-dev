@@ -26,7 +26,7 @@ jobs:
           podman login --username $GITHUB_ACTOR --password ${{secrets.GITHUB_TOKEN}} ghcr.io
       - name: Push container
         run: |
-          local_image_id=localhost/$GITHUB_REPOSITORY:latest
+          local_image_id=${{ github.repository }}:latest
           remote_image_id=oci-archive:ghcr.io/${{ github.repository }}:latest
           echo $local_image_id
           echo $remote_image_id
