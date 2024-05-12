@@ -18,7 +18,7 @@ jobs:
           podman build \
           --squash \
           --file=Containerfile \
-          --tag=$GITHUB_REPOSITORY:$GITHUB_SHA \
+          --tag=${{ github.repository }}:latest \
           $GITHUB_WORKSPACE
       - name: Login to ghcr.io
         run: |
@@ -28,7 +28,6 @@ jobs:
         run: |
           podman image ls
           podman container ls --all --size
-          echo podman push "localhost/$GITHUB_REPOSITORY:$GITHUB_SHA" "oci-archive:ghcr.io/${{ github.repository }}:latest"
+          echo podman push localhost/$GITHUB_REPOSITORY:latest oci-archive:ghcr.io/${{ github.repository }}:latest
           podman login --username $GITHUB_ACTOR --password ${{secrets.GITHUB_TOKEN}} ghcr.io
-          podman push "localhost/$GITHUB_REPOSITORY:$GITHUB_SHA" "oci-archive:ghcr.io/${{ github.repository }}:latest"
-          podman push "localhost/$GITHUB_REPOSITORY:$GITHUB_SHA" "oci-archive:ghcr.io/${{ github.repository }}:$COMMIT_SHA"
+          podman push localhost/$GITHUB_REPOSITORY:latest oci-archive:ghcr.io/${{ github.repository }}:latest
