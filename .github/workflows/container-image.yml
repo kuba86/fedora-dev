@@ -26,6 +26,8 @@ jobs:
           podman login --username $GITHUB_ACTOR --password ${{secrets.GITHUB_TOKEN}} ghcr.io
       - name: Push container
         run: |
+          podman image ls
+          podman container ls --all --size
           echo podman push $GITHUB_REPOSITORY:$GITHUB_SHA ghcr.io/${{ github.repository }}:latest
           podman push $GITHUB_REPOSITORY:$GITHUB_SHA ghcr.io/${{ github.repository }}:latest
           podman push $GITHUB_REPOSITORY:$GITHUB_SHA ghcr.io/${{ github.repository }}:$COMMIT_SHA
