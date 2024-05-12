@@ -16,8 +16,6 @@ jobs:
       - name: Build container
         run: |
           podman build \
-          --format=oci \
-          --tls-verify=true \
           --squash \
           --file=Containerfile \
           --tag=$GITHUB_REPOSITORY:$GITHUB_SHA \
@@ -28,6 +26,5 @@ jobs:
           podman login --username $GITHUB_ACTOR --password ${{secrets.GITHUB_TOKEN}} ghcr.io
       - name: Push container
         run: |
-          echo ghcr.io/${{ github.repository }}:latest
           podman push $GITHUB_REPOSITORY:$GITHUB_SHA ghcr.io/${{ github.repository }}:latest
           podman push $GITHUB_REPOSITORY:$GITHUB_SHA ghcr.io/${{ github.repository }}:$COMMIT_SHA
