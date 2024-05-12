@@ -32,4 +32,6 @@ jobs:
           echo $remote_image_id
           podman image ls
           echo podman push $local_image_id $remote_image_id
+          ls -ahl
+          ls -ahlR /home/runner/work/
           podman push $local_image_id $remote_image_id
