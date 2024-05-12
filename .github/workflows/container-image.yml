@@ -27,9 +27,6 @@ jobs:
       - name: Push container
         run: |
           local_image_id=${{ github.repository }}:latest
-          remote_image_id=oci-archive:ghcr.io/${{ github.repository }}:latest
-          echo $local_image_id
-          echo $remote_image_id
-          podman image ls
-          echo podman push $local_image_id $remote_image_id
-          podman push kuba86/fedora-dev:latest oci-archive:ghcr.io/kuba86/fedora-dev:latest
+          remote_image_id=ghcr.io/${{ github.repository }}:latest
+          echo podman push --format oci $local_image_id $remote_image_id
+          podman push --format oci $local_image_id $remote_image_id
