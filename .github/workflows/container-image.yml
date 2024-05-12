@@ -1,0 +1,29 @@
+name: Container Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  container:
+    name: build fedora-dev container
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Build container
+        run: |
+          podman build \
+          --squash \
+          --file=Containerfile \
+          --tag=${{ github.repository }}:$GITHUB_SHA \
+          $GITHUB_WORKSPACE
+      - name: Login to ghcr.io
+        run: |
+          podman login --username $GITHUB_ACTOR --password ${{secrets.GITHUB_TOKEN}} ghcr.io
+      - name: Push container
+        run: |
+          local_image_id=${{ github.repository }}:$GITHUB_SHA
+          remote_image_id=ghcr.io/${{ github.repository }}:latest
+          echo podman push --format oci $local_image_id $remote_image_id
+          podman push --format oci $local_image_id $remote_image_id
