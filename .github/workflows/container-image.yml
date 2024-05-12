@@ -24,11 +24,10 @@ jobs:
           $GITHUB_WORKSPACE
       - name: Login to ghcr.io
         run: |
-          cat #HOME/.config/containers/auth.json
           podman logout --all
           podman login --username $GITHUB_ACTOR --password ${{secrets.GITHUB_TOKEN}} ghcr.io
       - name: Push container
         run: |
-          echo ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:latest
-          podman push $GITHUB_REPOSITORY:$GITHUB_SHA ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:latest
-          podman push $GITHUB_REPOSITORY:$GITHUB_SHA ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:$COMMIT_SHA
+          echo ghcr.io/${{ github.repository }}:latest
+          podman push $GITHUB_REPOSITORY:$GITHUB_SHA ghcr.io/${{ github.repository }}:latest
+          podman push $GITHUB_REPOSITORY:$GITHUB_SHA ghcr.io/${{ github.repository }}:$COMMIT_SHA
