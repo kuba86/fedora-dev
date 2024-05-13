@@ -24,6 +24,7 @@ jobs:
       - name: Push container
         run: |
           local_image_id=${{ github.repository }}:$GITHUB_SHA
-          remote_image_id=ghcr.io/${{ github.repository }}:latest
-          echo podman push --format oci $local_image_id $remote_image_id
-          podman push --format oci $local_image_id $remote_image_id
+          remote_image_id=ghcr.io/${{ github.repository }}
+          podman push --format oci $local_image_id $remote_image_id:40
+          podman push --format oci $local_image_id $remote_image_id:latest
+          podman push --format oci $local_image_id $remote_image_id:$GITHUB_SHA

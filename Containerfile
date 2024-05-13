@@ -1,4 +1,6 @@
-FROM fedora:latest
+FROM fedora:40
+
+LABEL org.opencontainers.image.source=https://github.com/kuba86/fedora-dev
 
 RUN dnf -y update && \
     dnf -y install \
