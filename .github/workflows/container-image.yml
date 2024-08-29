@@ -8,13 +8,18 @@ jobs:
   container:
     name: build fedora-dev container
     runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Build container
         run: |
           podman build \
-          --platform linux/amd64,linux/arm64 \
           --squash \
           --file=Containerfile \
           --tag=${{ github.repository }}:$GITHUB_SHA \
