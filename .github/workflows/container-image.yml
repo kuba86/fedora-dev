@@ -20,6 +20,7 @@ jobs:
       - name: Build container
         run: |
           podman build \
+          --platform ${{ matrix.platform }} \
           --squash \
           --file=Containerfile \
           --tag=${{ github.repository }}:$GITHUB_SHA \
