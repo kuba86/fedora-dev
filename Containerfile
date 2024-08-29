@@ -28,7 +28,7 @@ RUN dnf -y install \
     procps \
     git
 RUN dnf clean all
-RUN  rm -rf /var/cache/yum
+RUN rm -rf /var/cache/yum
 RUN useradd --create-home core
 USER core
 WORKDIR /home/core
