@@ -27,7 +27,8 @@ RUN dnf -y update && \
     speedtest-cli \
     procps \
     git \
-    https://prerelease.keybase.io/keybase_amd64.rpm && \
+#    https://prerelease.keybase.io/keybase_amd64.rpm \
+    && \
     dnf clean all && \
     rm -rf /var/cache/yum
 RUN useradd --create-home core
