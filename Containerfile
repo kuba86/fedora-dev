@@ -2,8 +2,8 @@ FROM fedora:40
 
 LABEL org.opencontainers.image.source=https://github.com/kuba86/fedora-dev
 
-RUN dnf -y update && \
-    dnf -y install \
+RUN dnf -y update
+RUN dnf -y install \
     curl \
     wget \
     util-linux \
@@ -26,11 +26,9 @@ RUN dnf -y update && \
     which \
     speedtest-cli \
     procps \
-    git \
-#    https://prerelease.keybase.io/keybase_amd64.rpm \
-    && \
-    dnf clean all && \
-    rm -rf /var/cache/yum
+    git
+RUN dnf clean all
+RUN  rm -rf /var/cache/yum
 RUN useradd --create-home core
 USER core
 WORKDIR /home/core
