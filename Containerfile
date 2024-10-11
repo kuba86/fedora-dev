@@ -26,7 +26,9 @@ RUN dnf -y install \
     which \
     speedtest-cli \
     procps \
-    git
+    git \
+    pip \
+    jq
 RUN dnf clean all
 RUN rm -rf /var/cache/yum
 RUN useradd --create-home core
