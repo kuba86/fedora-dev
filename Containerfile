@@ -1,4 +1,4 @@
-FROM fedora:40
+FROM fedora:latest
 
 LABEL org.opencontainers.image.source=https://github.com/kuba86/fedora-dev
 
