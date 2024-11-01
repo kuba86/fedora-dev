@@ -11,9 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform:
-          - linux/amd64
-          - linux/arm64
+        arch: [amd64, arm64]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -22,15 +20,15 @@ jobs:
           podman build \
           --squash \
           --file=Containerfile \
-          --tag=${{ github.repository }}:$GITHUB_SHA \
+          --tag=${{ github.repository }}:$GITHUB_SHA-${{ matrix.arch }} \
           $GITHUB_WORKSPACE
       - name: Login to ghcr.io
         run: |
           podman login --username $GITHUB_ACTOR --password ${{secrets.GITHUB_TOKEN}} ghcr.io
       - name: Push container
         run: |
-          local_image_id=${{ github.repository }}:$GITHUB_SHA
+          local_image_id=${{ github.repository }}:$GITHUB_SHA-${{ matrix.arch }}
           remote_image_id=ghcr.io/${{ github.repository }}
-          podman push --format oci $local_image_id $remote_image_id:40
-          podman push --format oci $local_image_id $remote_image_id:latest
-          podman push --format oci $local_image_id $remote_image_id:$GITHUB_SHA
+          podman push --format oci $local_image_id $remote_image_id:40-${{ matrix.arch }}
+          podman push --format oci $local_image_id $remote_image_id:latest-${{ matrix.arch }}
+          podman push --format oci $local_image_id $remote_image_id:$GITHUB_SHA-${{ matrix.arch }}
