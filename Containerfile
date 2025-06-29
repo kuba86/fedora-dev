@@ -22,7 +22,6 @@ RUN dnf -y install \
     zip \
     unzip \
     which \
-    speedtest-cli \
     procps \
     git \
     pip \
