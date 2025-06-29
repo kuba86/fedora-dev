@@ -4,7 +4,6 @@ LABEL org.opencontainers.image.source=https://github.com/kuba86/fedora-dev
 
 RUN dnf -y update
 RUN dnf -y install \
-    curl \
     wget \
     util-linux \
     bat \
@@ -22,7 +21,6 @@ RUN dnf -y install \
     iproute \
     zip \
     unzip \
-    sudo \
     which \
     speedtest-cli \
     procps \
