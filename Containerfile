@@ -3,8 +3,7 @@ FROM fedora:42
 LABEL org.opencontainers.image.source=https://github.com/kuba86/fedora-dev
 
 RUN dnf -y update
-RUN dnf -y install --skip-unavailable \
-    wget \
+RUN dnf -y install  \
     util-linux \
     bat \
     fish \
@@ -25,12 +24,17 @@ RUN dnf -y install --skip-unavailable \
     procps \
     git \
     pip \
-    jq
+    jq \
+    speedtest-cli \
+    nodejs
 RUN dnf clean all
 RUN rm -rf /var/cache/yum
 RUN useradd --create-home core
 USER core
 WORKDIR /home/core
+RUN pip list --format=json --outdated | jq '.[].name' | xargs pip install --upgrade --no-warn-script-location && \
+    pip install --no-warn-script-location ansible ansible-dev-tools && \
+    python3 -m pip install ansible-navigator --user
 COPY --chown=core:core setup_files/fish.bashrc .bashrc.d/fish.bashrc
 COPY --chown=core:core setup_files/config.fish .config/fish/config.fish
 COPY --chown=core:core setup_files/functions .config/fish/functions
