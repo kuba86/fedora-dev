@@ -4,6 +4,7 @@ LABEL org.opencontainers.image.source=https://github.com/kuba86/fedora-dev
 
 RUN dnf -y update
 RUN dnf -y install --skip-unavailable \
+    wget \
     util-linux \
     bat \
     fish \
