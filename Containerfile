@@ -33,9 +33,6 @@ RUN rm -rf /var/cache/yum
 RUN useradd --create-home core
 USER core
 WORKDIR /home/core
-RUN pip list --format=json --outdated | jq '.[].name' | xargs pip install --upgrade --no-warn-script-location && \
-    pip install --no-warn-script-location ansible ansible-dev-tools && \
-    python3 -m pip install ansible-navigator --user
 COPY --chown=core:core setup_files/fish.bashrc .bashrc.d/fish.bashrc
 COPY --chown=core:core setup_files/config.fish .config/fish/config.fish
 COPY --chown=core:core setup_files/functions .config/fish/functions
