@@ -27,7 +27,8 @@ RUN dnf -y install --skip-unavailable \
     pip \
     jq \
     speedtest-cli \
-    nodejs
+    nodejs \
+    rsync
 RUN dnf clean all
 RUN rm -rf /var/cache/yum
 RUN useradd --create-home core
