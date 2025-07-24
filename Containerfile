@@ -2,8 +2,8 @@ FROM fedora:42
 
 LABEL org.opencontainers.image.source=https://github.com/kuba86/fedora-dev
 
-RUN dnf -y update
-RUN dnf -y install --skip-unavailable \
+RUN dnf -y update && \
+    dnf -y install --skip-unavailable \
     wget \
     util-linux \
     bat \
@@ -28,9 +28,11 @@ RUN dnf -y install --skip-unavailable \
     jq \
     speedtest-cli \
     nodejs \
-    rsync
-RUN dnf clean all
-RUN rm -rf /var/cache/yum
+    rsync \
+    binutils \
+    sysbench && \
+    dnf clean all && \
+    rm -rf /var/cache/yum
 RUN useradd --create-home core
 USER core
 WORKDIR /home/core
