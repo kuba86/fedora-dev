@@ -59,6 +59,7 @@ RUN mkdir /usr/share/nano-syntax-highlighting && \
     cat /home/core/50-nanorc >> /etc/nanorc && \
     rm -f 50-nanorc && \
     rm -f /tmp/* && \
-    chmod 600 /etc/sudoers.d/core
+    chmod 600 /etc/sudoers.d/core && \
+    echo "export EDITOR=nano" > /etc/profile.d/99-default-editor.sh
 USER core
 WORKDIR /home/core
