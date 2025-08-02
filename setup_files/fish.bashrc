@@ -1,6 +1,4 @@
-
-export VISUAL=nano
-export EDITOR=nano
+set -a; source /etc/environment; set +a
 
 if [[ $- == *i* ]]
 then
