@@ -1,4 +1,4 @@
-FROM fedora:42
+FROM fedora:43
 
 LABEL org.opencontainers.image.source=https://github.com/kuba86/fedora-dev
 
@@ -22,7 +22,7 @@ RUN dnf -y update && \
     zip \
     unzip \
     which \
-    procps \
+    procps-ng \
     git \
     pip \
     jq \
