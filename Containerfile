@@ -2,35 +2,37 @@ FROM fedora:43
 
 LABEL org.opencontainers.image.source=https://github.com/kuba86/fedora-dev
 
+COPY --chown=root:root --chmod=644 files/ /etc/yum.repos.d/
+
 RUN dnf -y update && \
-    dnf -y install --skip-unavailable \
-    wget \
-    util-linux \
+    dnf -y install \
     bat \
-    fish \
-    nano \
-    fd-find \
-    ncdu \
-    ncurses \
-    eza \
-    p7zip \
-    btop \
     bind-utils \
+    binutils \
+    btop \
+    eza \
+    fd-find \
+    fish \
+    git \
     iftop \
     iputils \
     iproute \
-    zip \
-    unzip \
-    which \
-    procps-ng \
-    git \
-    pip \
     jq \
-    speedtest-cli \
+    nano \
+    ncdu \
+    ncurses \
     nodejs \
+    p7zip \
+    pip \
+    procps-ng \
     rsync \
-    binutils \
-    sysbench && \
+    speedtest-cli \
+    sysbench \
+    unzip \
+    util-linux \
+    wget \
+    which \
+    zip && \
     dnf clean all && \
     rm -rf /var/cache/yum
 RUN useradd --create-home core
