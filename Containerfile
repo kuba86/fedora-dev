@@ -5,7 +5,7 @@ LABEL org.opencontainers.image.source=https://github.com/kuba86/fedora-dev
 COPY --chown=root:root --chmod=644 files/ /etc/yum.repos.d/
 
 RUN dnf -y update && \
-    dnf -y install \
+    dnf -y install --setopt=install_weak_deps=False \
     bat \
     bind-utils \
     binutils \
@@ -33,8 +33,10 @@ RUN dnf -y update && \
     wget \
     which \
     zip && \
-    dnf clean all && \
-    rm -rf /var/cache/yum
+    && dnf clean all \
+    && rm -rf /var/cache/{dnf,yum} \
+    && rm -rf /var/tmp/* /tmp/*
+
 RUN useradd --create-home core
 USER core
 WORKDIR /home/core
