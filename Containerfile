@@ -1,38 +1,13 @@
-FROM fedora:43
+FROM fedora:latest
 
 LABEL org.opencontainers.image.source=https://github.com/kuba86/fedora-dev
 
 COPY --chown=root:root --chmod=644 files/ /etc/yum.repos.d/
+COPY packages.txt /tmp/
 
 RUN dnf -y update \
     && dnf -y install --setopt=install_weak_deps=False \
-    bat \
-    bind-utils \
-    binutils \
-    btop \
-    eza \
-    fd-find \
-    fish \
-    git \
-    iftop \
-    iputils \
-    iproute \
-    jq \
-    nano \
-    ncdu \
-    ncurses \
-    nodejs \
-    p7zip \
-    pip \
-    procps-ng \
-    rsync \
-    speedtest-cli \
-    sysbench \
-    unzip \
-    util-linux \
-    wget \
-    which \
-    zip \
+    $(cat /tmp/packages.txt) \
     && dnf clean all \
     && rm -rf /var/cache/{dnf,yum} \
     && rm -rf /var/tmp/* /tmp/*
@@ -41,9 +16,11 @@ RUN useradd --create-home core
 USER core
 WORKDIR /home/core
 RUN pip list --format=json --outdated | jq '.[].name' | xargs pip install --upgrade --no-warn-script-location && \
-    pip install --no-warn-script-location ansible ansible-dev-tools && \
-    python3 -m pip install ansible-navigator --user
-COPY --chown=core:core setup_files/fish.bashrc .bashrc.d/fish.bashrc
+    uv tool install ansible && \
+    uv tool install ansible-core && \
+    uv tool install ansible-dev-tools && \
+    uv tool install ansible-navigator
+
 COPY --chown=core:core setup_files/config.fish .config/fish/config.fish
 COPY --chown=core:core setup_files/functions .config/fish/functions
 COPY --chown=root:root setup_files/core /etc/sudoers.d/core

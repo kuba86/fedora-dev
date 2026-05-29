@@ -1,3 +1,3 @@
 function rand-string
-  strings /dev/urandom | grep -o '[0-9a-zA-Z]' | head -n $argv[1] | tr -d '\n'; echo
+  head -c 1024 /dev/urandom | tr -dc [:alnum:] | head -c $argv[1]; echo
 end

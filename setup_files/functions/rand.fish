@@ -1,3 +1,3 @@
 function rand
-	strings /dev/urandom | grep -o '[0-9a-zA-Z@#$_&+:;<>^!?]' | head -n $argv[1] | tr -d '\n'; echo
+	head -c 1024 /dev/urandom | tr -dc [:graph:] | head -c $argv[1]; echo
 end
